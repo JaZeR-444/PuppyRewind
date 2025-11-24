@@ -26,25 +26,48 @@ export default function ResultsScreen() {
   const [showBefore, setShowBefore] = useState(false);
   const [saving, setSaving] = useState(false);
   const [autoSaved, setAutoSaved] = useState(false);
+  const [selectedAge, setSelectedAge] = useState<number>(3);
+  const [regenerating, setRegenerating] = useState(false);
+  const [currentTransformedUri, setCurrentTransformedUri] = useState("");
 
-  const { originalUri, transformedUri } = route.params;
+  const { originalUri, transformedUri, ageMonths } = route.params;
 
   useEffect(() => {
-    if (settings.autoSave && !autoSaved) {
+    setCurrentTransformedUri(transformedUri);
+    if (ageMonths) {
+      setSelectedAge(ageMonths);
+    }
+  }, [transformedUri, ageMonths]);
+
+  useEffect(() => {
+    if (settings.autoSave && !autoSaved && currentTransformedUri) {
       autoSaveImage();
     }
-  }, [settings.autoSave, autoSaved]);
+  }, [settings.autoSave, autoSaved, currentTransformedUri]);
 
   const autoSaveImage = async () => {
     try {
       const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status === "granted") {
-        await MediaLibrary.saveToLibraryAsync(transformedUri);
+        await MediaLibrary.saveToLibraryAsync(currentTransformedUri);
         setAutoSaved(true);
       }
     } catch (error) {
       console.error("Auto-save failed:", error);
     }
+  };
+
+  const handleAgeChange = async (newAge: number) => {
+    if (newAge === selectedAge || regenerating) return;
+    
+    setRegenerating(true);
+    setSelectedAge(newAge);
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    navigation.navigate("Processing", {
+      imageUri: originalUri,
+      ageMonths: newAge,
+    });
   };
 
   useLayoutEffect(() => {
@@ -66,8 +89,8 @@ export default function ResultsScreen() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     try {
       await Share.share({
-        message: "Check out my dog as a puppy! Created with PuppyTime",
-        url: transformedUri,
+        message: "Check out my dog as a puppy! Created with PuppyTime 🐶",
+        url: currentTransformedUri,
       });
     } catch (error) {
       console.error("Error sharing:", error);
@@ -89,7 +112,7 @@ export default function ResultsScreen() {
         return;
       }
 
-      await MediaLibrary.saveToLibraryAsync(transformedUri);
+      await MediaLibrary.saveToLibraryAsync(currentTransformedUri);
       
       Alert.alert(
         "Saved!",
@@ -167,10 +190,43 @@ export default function ResultsScreen() {
         </View>
 
         <Image
-          source={{ uri: showBefore ? originalUri : transformedUri }}
+          source={{ uri: showBefore ? originalUri : currentTransformedUri }}
           style={[styles.image, { borderColor: theme.primary }]}
           resizeMode="cover"
         />
+
+        <View style={styles.ageSliderContainer}>
+          <ThemedText style={[styles.ageLabel, Typography.caption, { color: theme.textSecondary }]}>
+            Puppy Age
+          </ThemedText>
+          <View style={styles.ageButtons}>
+            {[2, 3, 4, 6].map((age) => (
+              <Pressable
+                key={age}
+                onPress={() => handleAgeChange(age)}
+                style={[
+                  styles.ageButton,
+                  {
+                    backgroundColor: selectedAge === age ? theme.primary : theme.backgroundSecondary,
+                  },
+                ]}
+                disabled={regenerating}
+              >
+                <ThemedText
+                  style={[
+                    styles.ageButtonText,
+                    Typography.caption,
+                    {
+                      color: selectedAge === age ? "#FFFFFF" : theme.text,
+                    },
+                  ]}
+                >
+                  {age}mo
+                </ThemedText>
+              </Pressable>
+            ))}
+          </View>
+        </View>
 
         <View style={styles.buttonContainer}>
           <PrimaryButton
@@ -240,5 +296,26 @@ const styles = StyleSheet.create({
   disclaimer: {
     textAlign: "center",
     marginBottom: Spacing.xl,
+  },
+  ageSliderContainer: {
+    marginBottom: Spacing.xl,
+  },
+  ageLabel: {
+    textAlign: "center",
+    marginBottom: Spacing.sm,
+  },
+  ageButtons: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: Spacing.sm,
+  },
+  ageButton: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
+    minWidth: 60,
+  },
+  ageButtonText: {
+    textAlign: "center",
   },
 });

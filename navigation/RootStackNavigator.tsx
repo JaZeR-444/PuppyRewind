@@ -4,15 +4,17 @@ import HomeScreen from "@/screens/HomeScreen";
 import ProcessingScreen from "@/screens/ProcessingScreen";
 import ResultsScreen from "@/screens/ResultsScreen";
 import SettingsScreen from "@/screens/SettingsScreen";
+import GalleryScreen from "@/screens/GalleryScreen";
 import { HeaderTitle } from "@/components/HeaderTitle";
 import { useTheme } from "@/hooks/useTheme";
 import { getCommonScreenOptions } from "@/navigation/screenOptions";
 
 export type RootStackParamList = {
   Home: undefined;
-  Processing: { imageUri: string };
-  Results: { originalUri: string; transformedUri: string };
+  Processing: { imageUri: string; ageMonths?: number };
+  Results: { originalUri: string; transformedUri: string; ageMonths?: number };
   Settings: undefined;
+  Gallery: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -55,6 +57,15 @@ export default function RootStackNavigator() {
         options={{
           presentation: "modal",
           headerTitle: "Settings",
+          ...getCommonScreenOptions({ theme, isDark, transparent: false }),
+        }}
+      />
+      <Stack.Screen
+        name="Gallery"
+        component={GalleryScreen}
+        options={{
+          presentation: "modal",
+          headerTitle: "Gallery",
           ...getCommonScreenOptions({ theme, isDark, transparent: false }),
         }}
       />

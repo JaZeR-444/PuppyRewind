@@ -24,6 +24,19 @@ export default function HomeScreen() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () => (
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            navigation.navigate("Gallery");
+          }}
+          style={({ pressed }) => ({
+            opacity: pressed ? 0.5 : 1,
+          })}
+        >
+          <Feather name="image" size={24} color={theme.text} />
+        </Pressable>
+      ),
       headerRight: () => (
         <Pressable
           onPress={() => {

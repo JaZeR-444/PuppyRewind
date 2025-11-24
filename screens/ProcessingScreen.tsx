@@ -12,6 +12,7 @@ import { Spacing, BorderRadius, Typography } from "@/constants/theme";
 import { RootStackParamList } from "@/navigation/RootStackNavigator";
 import { transformToPuppy } from "@/utils/openai";
 import { saveTransformation } from "@/utils/storage";
+import { detectDogBreed } from "@/utils/breedDetection";
 
 type ProcessingScreenRouteProp = RouteProp<RootStackParamList, "Processing">;
 type ProcessingScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Processing">;
@@ -23,8 +24,9 @@ export default function ProcessingScreen() {
   const { settings } = useSettings();
   const insets = useSafeAreaInsets();
   const [progress, setProgress] = useState(0);
+  const [statusText, setStatusText] = useState("Analyzing your dog...");
 
-  const { imageUri } = route.params;
+  const { imageUri, ageMonths } = route.params;
 
   useEffect(() => {
     processImage();
@@ -38,9 +40,15 @@ export default function ProcessingScreen() {
 
   const processImage = async () => {
     try {
+      setStatusText("Detecting dog breed...");
+      const breed = await detectDogBreed(imageUri);
+      
+      setStatusText("Transforming your pup...");
       const transformedUri = await transformToPuppy({
         imageUri,
         quality: settings.imageQuality,
+        breed: breed || undefined,
+        ageMonths: ageMonths || 3,
       });
 
       await saveTransformation({
@@ -53,11 +61,12 @@ export default function ProcessingScreen() {
       navigation.replace("Results", {
         originalUri: imageUri,
         transformedUri,
+        ageMonths: ageMonths || 3,
       });
     } catch (error) {
       Alert.alert(
         "Transformation Failed",
-        "Unable to transform the image. Please ensure you have set your OpenAI API key in Settings and try again.",
+        "Unable to transform the image. Please ensure you have set your OpenAI API key and try again.",
         [
           {
             text: "Go to Settings",
@@ -96,7 +105,7 @@ export default function ProcessingScreen() {
         />
 
         <ThemedText style={[styles.statusText, Typography.body]}>
-          Transforming your pup...
+          {statusText}
         </ThemedText>
 
         <ThemedText
