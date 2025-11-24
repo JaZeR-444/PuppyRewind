@@ -64,7 +64,7 @@ export default function ResultsScreen() {
     setSelectedAge(newAge);
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
-    navigation.navigate("Processing", {
+    navigation.replace("Processing", {
       imageUri: originalUri,
       ageMonths: newAge,
     });
@@ -89,7 +89,7 @@ export default function ResultsScreen() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     try {
       await Share.share({
-        message: "Check out my dog as a puppy! Created with PuppyTime 🐶",
+        message: "Check out my dog as a puppy! Created with PuppyTime",
         url: currentTransformedUri,
       });
     } catch (error) {
