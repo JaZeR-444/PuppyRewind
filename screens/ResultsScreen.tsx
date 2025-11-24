@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, StyleSheet, Image, Pressable, Alert, Share } from "react-native";
 import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -25,8 +25,27 @@ export default function ResultsScreen() {
   const { settings } = useSettings();
   const [showBefore, setShowBefore] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [autoSaved, setAutoSaved] = useState(false);
 
   const { originalUri, transformedUri } = route.params;
+
+  useEffect(() => {
+    if (settings.autoSave && !autoSaved) {
+      autoSaveImage();
+    }
+  }, [settings.autoSave, autoSaved]);
+
+  const autoSaveImage = async () => {
+    try {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status === "granted") {
+        await MediaLibrary.saveToLibraryAsync(transformedUri);
+        setAutoSaved(true);
+      }
+    } catch (error) {
+      console.error("Auto-save failed:", error);
+    }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
