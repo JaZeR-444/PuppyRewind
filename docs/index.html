@@ -1,144 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PuppyRewind - Transform Your Dog Into a Puppy</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            padding: 40px;
-            text-align: center;
-        }
-        
-        h1 {
-            color: #333;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .emoji {
-            font-size: 4rem;
-            margin: 20px 0;
-        }
-        
-        p {
-            color: #666;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-        
-        .button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin: 10px;
-        }
-        
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-        
-        .note {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin-top: 30px;
-            text-align: left;
-            border-radius: 5px;
-        }
-        
-        .note h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-        
-        .note p {
-            font-size: 0.95rem;
-            margin-bottom: 0;
-        }
-        
-        .features {
-            text-align: left;
-            margin: 20px 0;
-        }
-        
-        .features ul {
-            list-style: none;
-        }
-        
-        .features li {
-            padding: 10px 0;
-            color: #555;
-        }
-        
-        .features li:before {
-            content: "🐾 ";
-            margin-right: 10px;
-        }
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>PuppyTime</title>
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="emoji">🐕➡️🐶</div>
-        <h1>PuppyRewind</h1>
-        <p>Transform your dog's photos into adorable puppy versions!</p>
-        
-        <div class="features">
-            <ul>
-                <li>Turn back time on your furry friend</li>
-                <li>See what they looked like as a pup</li>
-                <li>Easy-to-use interface</li>
-                <li>Works on iOS and Android</li>
-            </ul>
-        </div>
-        
-        <div class="note">
-            <h3>📱 This is a React Native App</h3>
-            <p>
-                PuppyRewind is built with React Native and Expo. To run the app:
-            </p>
-            <br>
-            <p><strong>Option 1:</strong> Install the Expo Go app on your phone, then scan the QR code from the development server</p>
-            <p><strong>Option 2:</strong> Clone the repository and run locally with <code>npm install && npm start</code></p>
-        </div>
-        
-        <div style="margin-top: 30px;">
-            <a href="https://github.com/jazer-444/PuppyRewind" class="button">View on GitHub</a>
-            <a href="https://expo.dev" class="button secondary">Learn About Expo</a>
-        </div>
-    </div>
+  <link rel="icon" href="/favicon.ico" /></head>
+
+  <body>
+    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+  <script src="/_expo/static/js/web/index-323c849175586e34a84238194ca89bdb.js" defer></script>
 </body>
 </html>
